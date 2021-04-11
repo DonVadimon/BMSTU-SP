@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 3.1	    03/28/21 21:57:41	    Page 1
+Turbo Assembler	 Version 3.1	    03/29/21 14:12:38	    Page 1
 LAB4.ASM
 
 
@@ -6,7 +6,7 @@ LAB4.ASM
       1	0000			     MYCODE SEGMENT 'CODE'
       2				       ASSUME CS:MYCODE, DS:MYCODE
       3
-      4	0000  30 31 32 33 34 35	36+	     HEX_STRING	DB '0123456789ABCDEF' ;	íÄÅãàñÄ	èÖêÖäéÑàêéÇäà
+      4	0000  30 31 32 33 34 35	36+	     HEXSTRING DB '0123456789ABCDEF' ; íÄÅãàñÄ èÖêÖäéÑàêéÇäà
       5	      37 38 39 41 42 43	44+
       6	      45 46
       7	0010  82 85 84 88 92 85	20+	     STARTSTR DB 'ÇÖÑàíÖ ëàåÇéã	Ñãü çÄóÄãÄ êÄÅéíõ èêéÉêÄååõ$'
@@ -26,7 +26,7 @@ LAB4.ASM
      21					     ; áÄÉêìáäÄ	ëÖÉåÖçíçéÉé êÖÉàëíêÄ ÑÄççõï DS
      22	005E  0E			 PUSH CS
      23	005F  1F			 POP  DS
-     24	0060  BB 0000r			       MOV  BX,	OFFSET HEX_STRING
+     24	0060  BB 0000r			       MOV  BX,	OFFSET HEXSTRING
      25
      26	0063			       MAIN:
      27					 ; éóàëíäÄ ùäêÄçÄ
@@ -43,121 +43,126 @@ LAB4.ASM
      38
      39					 ; ñàäãàóÖëäàâ ÇõÇéÑ ÅìäÇ çÄ ùäêÄç
      40	0073  B9 0014			 MOV  CX, 20
-     41	0076				 ZALOOP:
+     41	0076				 PRINT:
      42
      43					   ; ÇõÇéÑ ÅìäÇõ
-     44					   ;POP	  AX
-     45					   ;PUSH  AX
-     46	0076  8A D0			   MOV	 DL, AL
-     47	0078  50			   PUSH	 AX
-     48	0079  E8 003C			   CALL	 PUTCH
-     49
-     50					   ; íàêÖ
-     51	007C  BA 0020			   MOV	 DX, 32
-     52	007F  E8 0036			   CALL	 PUTCH
-     53	0082  BA 00CD			   MOV	 DX, 205
-     54	0085  E8 0030			   CALL	 PUTCH
-     55	0088  BA 0020			   MOV	 DX, 32
-     56	008B  E8 002A			   CALL	 PUTCH
-     57
-Turbo Assembler	 Version 3.1	    03/28/21 21:57:41	    Page 2
+     44	0076  8A D0			   MOV	 DL, AL
+     45	0078  50			   PUSH	 AX
+     46	0079  E8 003C			   CALL	 PUTCH
+     47
+     48					   ; íàêÖ
+     49	007C  BA 0020			   MOV	 DX, 32
+     50	007F  E8 0036			   CALL	 PUTCH
+     51	0082  BA 00CD			   MOV	 DX, 205
+     52	0085  E8 0030			   CALL	 PUTCH
+     53	0088  BA 0020			   MOV	 DX, 32
+     54	008B  E8 002A			   CALL	 PUTCH
+     55
+     56					   ; ÇõÇéÑ HEX
+     57	008E  58			   POP	 AX
+Turbo Assembler	 Version 3.1	    03/29/21 14:12:38	    Page 2
 LAB4.ASM
 
 
 
-     58					   ; ÇõÇéÑ HEX
-     59	008E  58			   POP	 AX
-     60	008F  E8 0041			   CALL	 HEX
-     61	0092  58			   POP	 AX
-     62
-     63					   ; INCREMENT ÅìäÇõ
-     64	0093  FE C0			   INC	 AL
-     65	0095  50			   PUSH	 AX
+     58	008F  E8 0041			   CALL	 HEX
+     59	0092  58			   POP	 AX
+     60
+     61					   ; INCREMENT ÅìäÇõ
+     62	0093  FE C0			   INC	 AL
+     63	0095  50			   PUSH	 AX
+     64
+     65	0096  E2 DE			 LOOP PRINT
      66
-     67	0096  E2 DE			 LOOP ZALOOP
-     68
-     69					 ; áÄèêéë çÄ èêéÑéãÜÖçàÖ èêéÉêÄååõ
-     70	0098  BA 003Ar			 MOV DX, OFFSET	MSGSTR
-     71	009B  E8 0015			 CALL PUTST
-     72	009E  E8 001C			 CALL CLRF
-     73	00A1  E8 0024			 CALL GETCH
-     74	00A4  3C 71			 CMP AL, 'q'
-     75	00A6  74 02			   JE EXIT
-     76	00A8  EB B9			 JMP MAIN
-     77
-     78	00AA			       EXIT:
-     79					 ; éóàëíäÄ ùäêÄçÄ
-     80	00AA  E8 0020			 CALL CLRSCR;
-     81
-     82					 ; ÇõïéÑ àá èêéÉêÄååõ
-     83	00AD  B0 00			 MOV AL, 0
-     84	00AF  B4 4C			 MOV AH, 4CH
-     85	00B1  CD 21			 INT 021H
-     86
-     87					     ; èêéñÖÑìêÄ - ÇõÇéÑ ëíêéäà	çÄ ùäêÄç
-     88	00B3				     PUTST PROC
-     89	00B3  B4 09				     MOV AH, 09H
-     90	00B5  CD 21				     INT 021H
-     91	00B7  C3				     RET
-     92	00B8				     PUTST ENDP
-     93
-     94					     ; èêéñÖÑìêÄ - ÇõÇéÑ ëàåÇéãÄ
-     95	00B8				     PUTCH PROC
-     96	00B8  B4 02				     MOV AH, 02H
-     97	00BA  CD 21				     INT 021H
-     98	00BC  C3				     RET
-     99	00BD				     PUTCH ENDP
-    100
-    101					     ; èêéñÖÑìêÄ - èÖêÖÇéÑ ëíêéäà
-    102	00BD				     CLRF PROC
-    103	00BD  B2 0A				     MOV   DL, 10
-    104	00BF  E8 FFF6				     CALL  PUTCH
-    105	00C2  B2 0D				     MOV   DL, 13
-    106	00C4  E8 FFF1				     CALL  PUTCH
-    107	00C7  C3				     RET
-    108	00C8				     CLRF ENDP
-    109
-    110					     ; èêéñÖÑìêÄ - ÇÇéÑ	ëàåÇéãÄ
-    111	00C8				     GETCH PROC
-    112	00C8  B4 08				     MOV AH, 08H
-    113	00CA  CD 21				     INT 021H
-    114	00CC  C3			 RET
-Turbo Assembler	 Version 3.1	    03/28/21 21:57:41	    Page 3
+     67					 ; áÄèêéë çÄ èêéÑéãÜÖçàÖ èêéÉêÄååõ
+     68	0098  BA 003Ar			 MOV DX, OFFSET	MSGSTR
+     69	009B  E8 0015			 CALL PUTST
+     70	009E  E8 001C			 CALL CLRF
+     71	00A1  E8 0024			 CALL GETCH
+     72	00A4  3C 71			 CMP AL, 'q'
+     73	00A6  74 02			   JE EXIT ; JUMP IF ZF	FLAG IS	EQUAL TO 1
+     74	00A8  EB B9			 JMP MAIN
+     75
+     76	00AA			       EXIT:
+     77					 ; éóàëíäÄ ùäêÄçÄ
+     78	00AA  E8 0020			 CALL CLRSCR;
+     79
+     80					 ; ÇõïéÑ àá èêéÉêÄååõ
+     81	00AD  B0 00			 MOV AL, 0
+     82	00AF  B4 4C			 MOV AH, 4CH
+     83	00B1  CD 21			 INT 021H
+     84
+     85					     ; èêéñÖÑìêÄ - ÇõÇéÑ ëíêéäà	çÄ ùäêÄç
+     86	00B3				     PUTST PROC
+     87	00B3  B4 09				     MOV AH, 09H
+     88	00B5  CD 21				     INT 021H
+     89	00B7  C3				     RET
+     90	00B8				     PUTST ENDP
+     91
+     92					     ; èêéñÖÑìêÄ - ÇõÇéÑ ëàåÇéãÄ
+     93	00B8				     PUTCH PROC
+     94	00B8  B4 02				     MOV AH, 02H
+     95	00BA  CD 21				     INT 021H
+     96	00BC  C3				     RET
+     97	00BD				     PUTCH ENDP
+     98
+     99					     ; èêéñÖÑìêÄ - èÖêÖÇéÑ ëíêéäà
+    100	00BD				     CLRF PROC
+    101	00BD  B2 0A				     MOV   DL, 10
+    102	00BF  E8 FFF6				     CALL  PUTCH
+    103	00C2  B2 0D				     MOV   DL, 13
+    104	00C4  E8 FFF1				     CALL  PUTCH
+    105	00C7  C3				     RET
+    106	00C8				     CLRF ENDP
+    107
+    108					     ; èêéñÖÑìêÄ - ÇÇéÑ	ëàåÇéãÄ
+    109	00C8				     GETCH PROC
+    110	00C8  B4 08				     MOV AH, 08H
+    111	00CA  CD 21				     INT 021H
+    112	00CC  C3			 RET
+    113	00CD				     GETCH ENDP
+    114
+Turbo Assembler	 Version 3.1	    03/29/21 14:12:38	    Page 3
 LAB4.ASM
 
 
 
-    115	00CD				     GETCH ENDP
-    116
-    117					     ; èêéñÖÑìêÄ - éóàëíäÄ ùäêÄçÄ
-    118	00CD				     CLRSCR PROC
-    119	00CD  B8 0003				     MOV AX, 03
-    120	00D0  CD 10			 INT 10H
-    121	00D2  C3			 RET
-    122	00D3				     CLRSCR ENDP
-    123
-    124					     ; èÖêÖÇéÑ Ç 16
-    125	00D3				     HEX PROC
-    126	00D3  50			     PUSH  AX
-    127	00D4  D0 E8 D0 E8 D0 E8	D0+	     SHR   AL, 4
-    128	      E8
-    129	00DC  D7			     XLAT
-    130	00DD  8A D0			     MOV   DL, AL
-    131	00DF  E8 FFD6			     CALL  PUTCH
-    132	00E2  58			     POP   AX
-    133	00E3  24 0F			     AND   AL, 00001111B
-    134	00E5  D7			     XLAT
-    135	00E6  8A D0			     MOV   DL, AL
-    136	00E8  E8 FFCD			     CALL  PUTCH
-    137	00EB  BA 0068			     MOV   DX, 104
-    138	00EE  E8 FFC7		       CALL  PUTCH
-    139	00F1  E8 FFC9			     CALL  CLRF
-    140	00F4  C3		       RET
-    141	00F5				     HEX ENDP
-    142				     ; äéçÖñ ëÖÉåÖçíÄ
-    143	00F5			     MYCODE ENDS
-    144				     END START
-Turbo Assembler	 Version 3.1	    03/28/21 21:57:41	    Page 4
+    115					     ; èêéñÖÑìêÄ - éóàëíäÄ ùäêÄçÄ
+    116	00CD				     CLRSCR PROC
+    117	00CD  B8 0003				     MOV AX, 03
+    118	00D0  CD 10			 INT 10H
+    119	00D2  C3			 RET
+    120	00D3				     CLRSCR ENDP
+    121
+    122					     ; èÖêÖÇéÑ Ç 16
+    123	00D3				     HEX PROC
+    124	00D3  50			     PUSH  AX
+    125	00D4  D0 E8 D0 E8 D0 E8	D0+	     SHR   AL, 4 ; 0035	0011 0101 -> 0000 0011
+    126	      E8
+    127	00DC  E8 001A			     CALL KASTIL
+    128	00DF  8A D0			     MOV   DL, AL
+    129	00E1  E8 FFD4			     CALL  PUTCH
+    130	00E4  58			     POP   AX
+    131	00E5  24 0F			     AND   AL, 00001111B
+    132	00E7  E8 000F			     CALL KASTIL
+    133	00EA  8A D0			     MOV   DL, AL
+    134	00EC  E8 FFC9			     CALL  PUTCH
+    135	00EF  BA 0068			     MOV   DX, 104
+    136	00F2  E8 FFC3		       CALL  PUTCH
+    137	00F5  E8 FFC5			     CALL  CLRF
+    138	00F8  C3		       RET
+    139	00F9				     HEX ENDP
+    140
+    141				       ;MY OWN XLAT
+    142	00F9			       KASTIL PROC
+    143	00F9  02 D8			 ADD BL, AL
+    144	00FB  8A 07			 MOV AL, [BX]
+    145	00FD			       KASTIL ENDP
+    146
+    147				     ; äéçÖñ ëÖÉåÖçíÄ
+    148	00FD			     MYCODE ENDS
+    149				     END START
+Turbo Assembler	 Version 3.1	    03/29/21 14:12:38	    Page 4
 Symbol Table
 
 
@@ -165,29 +170,30 @@ Symbol Table
 
 Symbol Name		Type   Value			   Cref	(defined at #)
 
-??DATE			Text   "03/28/21"
+??DATE			Text   "03/29/21"
 ??FILENAME		Text   "LAB4	"
-??TIME			Text   "21:57:41"
+??TIME			Text   "14:12:38"
 ??VERSION		Number 030A
 @CPU			Text   0101H
 @CURSEG			Text   MYCODE			   #1
 @FILENAME		Text   LAB4
 @WORDSIZE		Text   2			   #1
-CLRF			Near   MYCODE:00BD		   33  72  #102	 139
-CLRSCR			Near   MYCODE:00CD		   28  80  #118
-EXIT			Near   MYCODE:00AA		   75  #78
-GETCH			Near   MYCODE:00C8		   36  73  #111
-HEX			Near   MYCODE:00D3		   60  #125
-HEX_STRING		Byte   MYCODE:0000		   #4  24
-MAIN			Near   MYCODE:0063		   #26	76
-MSGSTR			Byte   MYCODE:003A		   #13	70
-PUTCH			Near   MYCODE:00B8		   48  52  54  56  #95	104  106  131  136  138
-PUTST			Near   MYCODE:00B3		   32  71  #88
-START			Near   MYCODE:005E		   #20	144
+CLRF			Near   MYCODE:00BD		   33  70  #100	 137
+CLRSCR			Near   MYCODE:00CD		   28  78  #116
+EXIT			Near   MYCODE:00AA		   73  #76
+GETCH			Near   MYCODE:00C8		   36  71  #109
+HEX			Near   MYCODE:00D3		   58  #123
+HEXSTRING		Byte   MYCODE:0000		   #4  24
+KASTIL			Near   MYCODE:00F9		   127	132  #142
+MAIN			Near   MYCODE:0063		   #26	74
+MSGSTR			Byte   MYCODE:003A		   #13	68
+PRINT			Near   MYCODE:0076		   #41	65
+PUTCH			Near   MYCODE:00B8		   46  50  52  54  #93	102  104  129  134  136
+PUTST			Near   MYCODE:00B3		   32  69  #86
+START			Near   MYCODE:005E		   #20	149
 STARTSTR		Byte   MYCODE:0010		   #7  31
-ZALOOP			Near   MYCODE:0076		   #41	67
 
 Groups & Segments	Bit Size Align	Combine	Class	   Cref	(defined at #)
 
-MYCODE			16  00F5 Para	none	CODE	   #1  2  2
+MYCODE			16  00FD Para	none	CODE	   #1  2  2
 

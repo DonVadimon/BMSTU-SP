@@ -1,7 +1,7 @@
 MYCODE SEGMENT 'CODE'
   ASSUME CS:MYCODE, DS:MYCODE
 	
-	HEX_STRING DB '0123456789ABCDEF' ; íÄÅãàñÄ èÖêÖäéÑàêéÇäà
+	HEXSTRING DB '0123456789ABCDEF' ; íÄÅãàñÄ èÖêÖäéÑàêéÇäà
 	STARTSTR DB 'ÇÖÑàíÖ ëàåÇéã Ñãü çÄóÄãÄ êÄÅéíõ èêéÉêÄååõ$'
 	MSGSTR DB 'Ñãü ÇõïéÑÄ àá èêéÉêÄååõ çÄÜåàíÖ "q"$'
 
@@ -9,7 +9,7 @@ MYCODE SEGMENT 'CODE'
 	; áÄÉêìáäÄ ëÖÉåÖçíçéÉé êÖÉàëíêÄ ÑÄççõï DS
     PUSH CS
     POP  DS
-	  MOV  BX, OFFSET HEX_STRING
+	  MOV  BX, OFFSET HEXSTRING
 	
   MAIN:
     ; éóàëíäÄ ùäêÄçÄ
@@ -26,11 +26,9 @@ MYCODE SEGMENT 'CODE'
     
     ; ñàäãàóÖëäàâ ÇõÇéÑ ÅìäÇ çÄ ùäêÄç
     MOV  CX, 20
-    ZALOOP:
+    PRINT:
     
       ; ÇõÇéÑ ÅìäÇõ
-      POP   AX
-      PUSH  AX
       MOV   DL, AL
       PUSH  AX
       CALL  PUTCH
@@ -52,7 +50,7 @@ MYCODE SEGMENT 'CODE'
       INC   AL
       PUSH  AX
       
-    LOOP ZALOOP
+    LOOP PRINT
     
     ; áÄèêéë çÄ èêéÑéãÜÖçàÖ èêéÉêÄååõ
     MOV DX, OFFSET MSGSTR
@@ -60,7 +58,7 @@ MYCODE SEGMENT 'CODE'
     CALL CLRF
     CALL GETCH
     CMP AL, 'q'
-      JE EXIT
+      JE EXIT ; JUMP IF ZF FLAG IS EQUAL TO 1
     JMP MAIN
 
   EXIT:
@@ -112,20 +110,35 @@ MYCODE SEGMENT 'CODE'
 	; èÖêÖÇéÑ Ç 16
 	HEX PROC
 	PUSH  AX
-	SHR   AL, 4
-	XLAT
-	MOV   DL, AL
+	SHR   AL, 4 ; 0035 0011 0101 -> 0000 0011
+
+	CALL  KASTIL ; XLAT
+
+  MOV   DL, AL
 	CALL  PUTCH
 	POP   AX
 	AND   AL, 00001111B
-	XLAT 
-	MOV   DL, AL
+
+	CALL  KASTIL ; XLAT
+
+  MOV   DL, AL
 	CALL  PUTCH
 	MOV   DX, 104
   CALL  PUTCH
 	CALL  CLRF
   RET
 	HEX ENDP
+
+  ; MY OWN XLAT
+  KASTIL PROC
+    PUSH  BX
+    MOV   AH, 0
+    ADD   BX, AX
+    MOV   AL, [BX]
+    POP   BX
+    RET
+  KASTIL ENDP
+
 ; äéçÖñ ëÖÉåÖçíÄ
 MYCODE ENDS
 END START
