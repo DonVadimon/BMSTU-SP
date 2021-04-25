@@ -1,43 +1,36 @@
+; …‘‹ˆ ŠŽ„ —…’›‰ ’Ž ‚›‚Ž„ˆ’œ, …‘‹ˆ …—…’›‰ - … ‚›‚Ž„ˆ’œ
+; „Ž‹‹€ … ‚›‚Ž„ˆ’œ
+
 MYCODE SEGMENT 'CODE'
 ASSUME CS:MYCODE, DS:MYCODE
 	HEX_STRING DB '0123456789ABCDEF' ; ’€‹ˆ–€ ŠŽ„ˆŽ‚Šˆ
-	STR1 DB '‚‚…„ˆ’… ‘’ŽŠ“$'
-	STR2 DB '€†Œˆ’… "Q" „‹Ÿ ‚›•Ž„€: $'
+	STARTMSG DB '‚‚…„ˆ’… ‘’ŽŠ“$'
+	ENDMSG DB '€†Œˆ’… "q" „‹Ÿ ‚›•Ž„€: $'
 
   START:
 	; ‡€ƒ“‡Š€ ‘…ƒŒ…’ŽƒŽ …ƒˆ‘’€ DS
 	PUSH CS
 	POP DS
 	MOV BX, OFFSET HEX_STRING
-	
-	;PUSH DS
-	;POP AX
-	;PUSH AX
-	;MOV DL, AH
-	;MOV AH, AL
-	;MOV AL, DL
-	;CALL HEX
-	;POP AX
-	;CALL HEX	
 
 	; “”…
 	BUF DB 20 DUP (' ')
 	
 	; Ž—ˆ‘’Š€ Š€€
-	;CALL CLRSCR;
+	CALL CLRSCR
 	
 	MOV CX, 10
-    MAIN:
-	
+  MAIN:
+
 		; ‚›‚Ž„ ‘ŽŽ™…ˆŸ Ž ‚‚Ž„… ‘’ŽŠˆ
-		MOV DX, OFFSET STR1
-		CALL PUTST
+		MOV DX, OFFSET STARTMSG
+		CALL PUTSTR
 		CALL CLRF
 		
 		LEA SI, BUF
 
     INPUT:
-		; ‡€ˆ‘œ ‘ˆŒ‚ŽŽ‚ ‚ €ŒŸ’œ
+		; ‡€ˆ‘œ ‘ˆŒ‚Ž‹Ž‚ ‚ €ŒŸ’œ
 		CALL GETCH
 		MOV [SI], AL
 	
@@ -45,9 +38,12 @@ ASSUME CS:MYCODE, DS:MYCODE
 		CMP AL, '$'
 		JE STARTOUTPUT
 		INC SI
-		JMP INPUT 
+		JMP INPUT
 		
     STARTOUTPUT:
+    ; BACKSPACE
+    MOV DX, 08
+		CALL PUTCH
 		; €‚Ž
 		MOV DX, 32
 		CALL PUTCH
@@ -64,40 +60,27 @@ ASSUME CS:MYCODE, DS:MYCODE
 		LEA SI, BUF
 		SUB CX, SI
 		MOV DX, CX
-		ADD DX, 5
-	SYMBOL:
-		
-		; Ž‹“—…ˆ… ‘ˆŒŽ‹€ ˆ‡ “”…€
-		MOV AL, [SI]
-		INC SI
-		PUSH DX
-		; ‚›‚Ž„ ‘ˆŒ‚Ž‹€ € Š€
-		CALL HEX
-		
-		CALL CLRF
-		
-		POP DX
-		PUSH CX
-		
-		MOV CX, DX
-		PUSH DX
-		SPACE:
-			; ‚›‚Ž„ Ž…‹€
-			MOV DX, 32
-			CALL PUTCH
-		LOOP SPACE
-		POP DX
-		INC DX
-		POP CX
-	LOOP SYMBOL
-	
+    SYMBOL:
+      
+      ; Ž‹“—…ˆ… ‘ˆŒŽ‹€ ˆ‡ “”…€
+      MOV AL, [SI]
+      INC SI
+      ; ‚›‚Ž„ ‘ˆŒ‚Ž‹€ € Š€
+      CALL HEX
+      
+      ; SPACE
+      MOV DX, 32
+      CALL PUTCH
+      
+    LOOP SYMBOL
+    
 		; ˆ‡‚‹…—…ˆ… CX
 		POP CX
 	
 		; ‚‚›Ž„ ‘ŽŽ™…ˆŸ Ž ‡€‚…˜…ˆˆ ˆ‹ˆ Ž„Ž‹†…ˆˆ Žƒ€ŒŒ›
 		CALL CLRF
-		MOV DX, OFFSET STR2
-		CALL PUTST
+		MOV DX, OFFSET ENDMSG
+		CALL PUTSTR
 		CALL GETCH
 		CMP AL, 'q'
 		JE EXIT 
@@ -115,11 +98,11 @@ ASSUME CS:MYCODE, DS:MYCODE
 	INT 021H
 	
 	; Ž–…„“€ - ‚›‚Ž„ ‘’ŽŠˆ € Š€
-	PUTST PROC
+	PUTSTR PROC
 		MOV AH, 09H
 		INT 021H
 		RET
-	PUTST ENDP
+	PUTSTR ENDP
 	
 	; Ž–…„“€ - ‚›‚Ž„ ‘ˆŒ‚Ž‹€ 
 	PUTCH PROC
@@ -166,10 +149,20 @@ ASSUME CS:MYCODE, DS:MYCODE
 	XLAT
 
   MOV   DL, AL
+
+  SAR AL, 01
+  JNC ISEVEN
+
+  MOV DX, 08
+  CALL PUTCH
+  JMP TERMINATE
+
+  ISEVEN:
 	CALL  PUTCH
 	MOV   DX, 104
   CALL  PUTCH
-	CALL  CLRF
+  
+  TERMINATE:
   RET
 	HEX ENDP
 	
