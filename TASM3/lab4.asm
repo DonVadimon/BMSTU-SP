@@ -1,39 +1,39 @@
 MYCODE SEGMENT 'CODE'
   ASSUME CS:MYCODE, DS:MYCODE
 	
-	HEXSTRING DB '0123456789ABCDEF' ; ’€‹ˆ–€ ……ŠŽ„ˆŽ‚Šˆ
-	STARTSTR DB '‚…„ˆ’… ‘ˆŒ‚Ž‹ „‹Ÿ €—€‹€ €Ž’› Žƒ€ŒŒ›$'
-	MSGSTR DB '„‹Ÿ ‚›•Ž„€ ˆ‡ Žƒ€ŒŒ› €†Œˆ’… "q"$'
+	HEXSTRING DB '0123456789ABCDEF' ; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	STARTSTR DB 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½$'
+	MSGSTR DB 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ "q"$'
 
   START:
-	; ‡€ƒ“‡Š€ ‘…ƒŒ…’ŽƒŽ …ƒˆ‘’€ „€›• DS
+	; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DS
     PUSH CS
     POP  DS
 	  MOV  BX, OFFSET HEXSTRING
 	
   MAIN:
-    ; Ž—ˆ‘’Š€ Š€€
+    ; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     CALL CLRSCR;
     
-    ; ‚›‚Ž„ ‘’ŽŠˆ-Ž„‘Š€‡Šˆ Ž ’ŽŒ, —’Ž €„Ž ‚‚…‘’ˆ “Š‚“
+    ; ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
     MOV  DX, OFFSET STARTSTR
     CALL PUTST
     CALL CLRF
     
-    ; ‡€Ž‘ € ‚‚Ž„ ‘ˆŒ‚Ž‹€ 
+    ; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
     CALL GETCH
     PUSH AX
     
-    ; –ˆŠ‹ˆ—…‘Šˆ‰ ‚›‚Ž„ “Š‚ € Š€
+    ; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
     MOV  CX, 20
     PRINT:
     
-      ; ‚›‚Ž„ “Š‚›
+      ; ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
       MOV   DL, AL
       PUSH  AX
       CALL  PUTCH
       
-      ; ’ˆ…
+      ; ï¿½ï¿½ï¿½ï¿½
       MOV   DX, 32
       CALL  PUTCH
       MOV   DX, 205
@@ -41,18 +41,18 @@ MYCODE SEGMENT 'CODE'
       MOV   DX, 32
       CALL  PUTCH
       
-      ; ‚›‚Ž„ HEX
+      ; ï¿½ï¿½ï¿½ï¿½ï¿½ HEX
       POP   AX
       CALL  HEX
       POP   AX
       
-      ; INCREMENT “Š‚›
+      ; INCREMENT ï¿½ï¿½ï¿½ï¿½ï¿½
       INC   AL
       PUSH  AX
       
     LOOP PRINT
     
-    ; ‡€Ž‘ € Ž„Ž‹†…ˆ… Žƒ€ŒŒ›
+    ; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     MOV DX, OFFSET MSGSTR
     CALL PUTST
     CALL CLRF
@@ -62,29 +62,29 @@ MYCODE SEGMENT 'CODE'
     JMP MAIN
 
   EXIT:
-    ; Ž—ˆ‘’Š€ Š€€
+    ; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     CALL CLRSCR;
     
-    ; ‚›•Ž„ ˆ‡ Žƒ€ŒŒ›
+    ; ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     MOV AL, 0
     MOV AH, 4CH
     INT 021H
 	
-	; Ž–…„“€ - ‚›‚Ž„ ‘’ŽŠˆ € Š€
+	; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	PUTST PROC
 		MOV AH, 09H
 		INT 021H
 		RET
 	PUTST ENDP
 	
-	; Ž–…„“€ - ‚›‚Ž„ ‘ˆŒ‚Ž‹€ 
+	; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	PUTCH PROC
 		MOV AH, 02H
 		INT 021H
 		RET
 	PUTCH ENDP
 
-	; Ž–…„“€ - ……‚Ž„ ‘’ŽŠˆ
+	; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	CLRF PROC
 		MOV   DL, 10
 		CALL  PUTCH
@@ -93,24 +93,24 @@ MYCODE SEGMENT 'CODE'
 		RET
 	CLRF ENDP 
 
-	; Ž–…„“€ - ‚‚Ž„ ‘ˆŒ‚Ž‹€ 
+	; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	GETCH PROC   
 		MOV AH, 08H
 		INT 021H
     RET
 	GETCH ENDP
 
-	; Ž–…„“€ - Ž—ˆ‘’Š€ Š€€ 
+	; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	CLRSCR PROC   
 		MOV AX, 03
     INT 10H
     RET
 	CLRSCR ENDP
 	
-	; ……‚Ž„ ‚ 16
+	; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ 16
 	HEX PROC
 	PUSH  AX
-	SHR   AL, 4 ; 0035 0011 0101 -> 0000 0011
+	SHR   AL, 4 ; 0035 = 0011 0101 -> 0000 0011
 
 	CALL  KASTIL ; XLAT
 
@@ -139,6 +139,6 @@ MYCODE SEGMENT 'CODE'
     RET
   KASTIL ENDP
 
-; ŠŽ…– ‘…ƒŒ…’€
+; ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 MYCODE ENDS
 END START

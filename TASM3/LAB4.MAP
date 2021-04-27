@@ -1,8 +1,8 @@
 
  Start  Stop   Length Name               Class
 
- 00000H 00101H 00102H MYCODE             CODE
+ 00000H 0017FH 00180H MYCODE             CODE
 
-Program entry point at 0000:005E
+Program entry point at 0000:00DC
 Warning: No stack
 
