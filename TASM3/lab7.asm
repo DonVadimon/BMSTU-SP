@@ -1,0 +1,283 @@
+MYCODE SEGMENT 'CODE'
+    ASSUME CS:MYCODE, DS:DATA
+	
+START:
+	; ‡€ƒ“‡Š€ ‘…ƒŒ…’ŽƒŽ …ƒˆ‘’€ „€›• DS
+	MOV AX, DATA
+	MOV DS, AX
+	
+MAIN:
+	;Ž—ˆ‘’Š€ Š€€
+	CALL CLRSCR;
+	
+	; …„‹Ž†…ˆ… ‚‚…‘’ˆ ‘ˆŒ‚Ž‹€
+	MOV DL, OFFSET STARTSTR
+	CALL PUTST
+	CALL CLRF
+	
+	; Ž—ˆ™€…Œ ‘—…’—ˆŠ ˆ …ƒˆ‘’ Š“„€ “„…Œ ‡€Ž‘ˆ’œ ‘ˆŒ‚Ž‹›
+	MOV CX, 0 
+	MOV BX, 0
+		
+	CHAR_HAND:
+		; Ž†ˆ„€ˆ… ‚‚Ž„€ ‘ˆŒ‚Ž‹€
+		CALL GETCH_NO_ECHO
+		CMP AL, '*'
+		JE EXIT
+		
+		; Ž‚…Š€ € €‚ˆ‹œŽ‘’œ ‚‚…„…›• „€›• ˆ ……‚Ž„ ‚ Œ€˜ˆ›‰ ŠŽ„
+		CALL HEX_TO_MACH
+	
+	CMP CX, 4
+	JNE CHAR_HAND
+	
+	; ‘Ž•€Ÿ…Œ —ˆ‘‹Ž
+	PUSH BX
+	
+	; Ð’ž
+	MOV DL, ' '
+	CALL PUTCH
+	MOV DL, '='
+	CALL PUTCH
+	MOV DL, ' '
+	CALL PUTCH
+	
+	; ‘Ž•€Ÿ…Œ —ˆ‘‹Ž
+	MOV DX, BX
+	PUSH DX
+	
+	; ‚›‚Ž„ € Š€ …‚›• 2 ‘ˆŒ‚Ž‹Ž‚
+	MOV AL, DH
+	CALL HEX
+	
+	; ‚›‚Ž„ € Š€ ‚’Ž›• 2 ‘ˆŒ‚Ž‹Ž‚
+	POP DX
+	MOV AL, DL
+	CALL HEX
+	
+	; ‚›‚Ž„ H
+	MOV DX, 'H'
+	CALL PUTCH
+	
+	; ’ˆ…
+	MOV DL, ' '
+	CALL PUTCH
+	MOV DL, '-'
+	CALL PUTCH
+	MOV DL, ' '
+	CALL PUTCH
+	
+	; ‚›‚Ž„ „…‘Ÿ’ˆ—ŽƒŽ —ˆ‘‹€
+	POP BX
+	CALL MACH_TO_DEC
+	CALL CLRF
+	
+	; Ž†ˆ„€ˆ… ‚‚Ž„€ ‘ˆŒ‚Ž‹€
+	CALL GETCH_NO_ECHO
+
+JMP MAIN
+
+EXIT:
+	; Ž—ˆ‘’Š€ Š€€
+	CALL CLRSCR;
+	
+	; Âû’ž” ˜ôžðœö˜˜ ž ð•‘•
+	MOV DL, OFFSET INFSTR
+	CALL PUTST
+	CALL CLRF
+	
+	; Ž†ˆ„€ˆ… ‚‚Ž„€ ‘ˆŒ‚Ž‹€
+	CALL GETCH_NO_ECHO
+	
+	; Ž—ˆ‘’Š€ Š€€
+	CALL CLRSCR;
+	
+	; Âûôž” ˜— Ÿðž“ðœœû
+	MOV AL, 0
+	MOV AH, 4CH
+	INT 021H
+	
+
+; Ž–…„“€ - ‚›‚Ž„ ‘’ŽŠˆ € Š€
+PUTST PROC
+	MOV AH, 09H
+	INT 021H
+	RET
+PUTST ENDP
+	
+; Ž–…„“€ - ‚›‚Ž„ ‘ˆŒ‚Ž‹€
+PUTCH PROC
+	MOV AH, 02H
+	INT 021H
+	RET
+PUTCH ENDP
+
+
+; Ž–…„“€ - ……‚Ž„ ‘’ŽŠˆ
+CLRF PROC
+	MOV DL, 10
+	CALL PUTCH
+	MOV DL, 13
+	CALL PUTCH
+	RET
+CLRF ENDP 
+
+
+; Ž–…„“€ - ‚‚Ž„ ‘ˆŒ‚Ž‹€ ‘ •Ž
+GETCH_ECHO PROC   
+	MOV AH, 01H
+	INT 021H
+    RET
+GETCH_ECHO ENDP
+	
+	
+; Ž–…„“€ - ‚‚Ž„ ‘ˆŒ‚Ž‹€ …‡ •Ž
+GETCH_NO_ECHO PROC   
+	MOV AH, 08H
+	INT 021H
+    RET
+GETCH_NO_ECHO ENDP
+
+
+; Ž–…„“€ - Ž—ˆ‘’Š€ Š€€
+CLRSCR PROC   
+	MOV AH, 00H 
+	MOV AL, 02
+	INT 10H
+	RET
+CLRSCR ENDP
+
+
+; Ž–…„“€ - ……‚Ž„ ‚ 16
+HEX PROC
+	MOV BX, OFFSET HEXSTR
+	
+	; Ž‹“—…ˆ… „…‘Ÿ’ŠŽ‚
+	PUSH AX
+	SHR AL, 4
+	XLAT 
+	
+	; ‚›‚Ž„ „…‘Ÿ’ŠŽ‚
+	MOV DL, AL
+	CALL PUTCH
+	
+	; Ž‹“—…ˆ… …„ˆˆ–
+	POP AX
+	AND AL, 00001111B
+	XLAT 
+	
+	; ‚›‚Ž„ …„ˆˆ–
+	MOV DL, AL
+	CALL PUTCH
+	
+	RET
+HEX ENDP
+
+
+; Ž–…„“€ - ……‚Ž„ ‚ Œ€˜ˆ›‰ ŠŽ„
+HEX_TO_MACH PROC
+	MOV DL, AL
+	
+	; Ž‚…Š€ € ‚‚Ž„ –ˆ”›
+	CHECK_NUM:
+		; Ž‚…Š€ € –ˆ”“
+		CMP AL,'0'
+		JB CHECK_BIG_LET
+		CMP AL,'9'
+		JA CHECK_BIG_LET
+		
+		; Ž‹“—…ˆ… –ˆ”›
+		SUB AL,'0' 
+		PUSH AX
+	JMP CORRECT
+	
+	; Ž‚…Š€ € ‚‚Ž„ Ž‹œ˜Ž‰ “Š‚›
+	CHECK_BIG_LET: 
+		; Ž‚…Š€ € Ž‹œ˜“ž “Š‚“
+		CMP AL,'A' 
+		JB CHECK_LIT_LET
+		CMP AL,'F'
+		JA CHECK_LIT_LET
+		
+		; Ž‹“—…ˆ… “Š‚›
+		SUB AL,'A' 
+		ADD AL, 10  
+		PUSH AX
+	JMP CORRECT
+	
+	; Ž‚…Š€ € ‚‚Ž„ Œ€‹…œŠŽ‰ “Š‚›
+	CHECK_LIT_LET:
+		; Ž‚…Š€ € Œ€‹…œŠ“ž “Š‚“
+		CMP AL,'A' 
+		JB FINISH
+		CMP AL,'F'
+		JA FINISH
+		
+		; Ž‹“—…ˆ… “Š‚›
+		SUB AL,'A' 
+		ADD AL, 10 
+		PUSH AX
+	JMP CORRECT	
+	
+	; …‘‹ˆ ‚‚…„…›‰ ‘ˆŒ‚Ž‹ “„Ž‚‹…’‚ŽŸ…’ “‘‹Ž‚ˆŸŒ
+	CORRECT: 
+		; ‚›‚Ž„ € Š€
+		CALL PUTCH 
+		
+		; „Ž€‚‹…ˆ… ‚ BX €˜…ƒŽ ‘ˆŒ‚Ž‹€
+		POP AX 
+		MOV AH, 0    
+		SHL BX, 4
+		ADD BX, AX	
+	; “‚…‹ˆ—…ˆ… ‘—…’—ˆŠ€
+	INC CX 
+	
+	; ‚›•Ž„ ˆ‡ ”“Š–ˆˆ
+	FINISH: 
+	RET
+HEX_TO_MACH ENDP
+
+; Ž–…„“€ - ……‚Ž„ ‚ „…‘Ÿ’ˆ—›‰ ŠŽ„
+MACH_TO_DEC PROC
+	; AX - „…‹ˆŒŽ…
+	MOV AX, BX      	
+	MOV SI, 0
+	
+	CYCLE:
+		; DX - Ž‘’€’ŽŠ
+		MOV DX, 0	
+		; BX - „…‹ˆ’…‹œ
+		MOV BX, ARR[SI]	;„…‹ˆ’…‹œ 
+	
+		; „…‹ˆŒ AX € BX, ˆ ’ŽŒ AX - —€‘’Ž…, DX - Ž‘’€’ŽŠ
+		DIV BX	
+		; ‘Ž•€Ÿ…Œ Ž‘’€’ŽŠ
+		PUSH DX
+
+		; ‚›‚Ž„ ‘ˆŒ‚Ž‹€ € Š€
+		ADD AX,'0'		
+		MOV DL,AL
+		CALL PUTCH
+
+		; Ž‹“—€…Œ Ž‚Ž… „…‹ˆŒŽ…
+		POP AX
+		INC SI
+		INC SI
+	
+		CMP SI, 10
+	JB CYCLE	
+RET
+MACH_TO_DEC	ENDP
+
+; ŠŽ…– ‘…ƒŒ…’€
+MYCODE ENDS
+
+
+DATA SEGMENT
+	STARTSTR DB, '‚‚…„ˆ’… —ˆ‘‹Ž (HHHH) :$'
+	HEXSTR DB '0123456789ABCDEF'
+	ARR DW 10000, 1000, 100, 10, 1
+	INFSTR DB, 'Ž‘’€‚œ’… ‡€—…’$'
+DATA ENDS
+
+END START
