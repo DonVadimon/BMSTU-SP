@@ -182,32 +182,18 @@ HEX_TO_MACH PROC
 	CHECK_NUM:
 		; Ž‚…Š€ € –ˆ”“
 		CMP AL,'0'
-		JB CHECK_BIG_LET
+		JB CHECK_LET
 		CMP AL,'9'
-		JA CHECK_BIG_LET
+		JA CHECK_LET
 		
 		; Ž‹“—…ˆ… –ˆ”›
 		SUB AL,'0' 
 		PUSH AX
 	JMP CORRECT
 	
-	; Ž‚…Š€ € ‚‚Ž„ Ž‹œ˜Ž‰ “Š‚›
-	CHECK_BIG_LET: 
-		; Ž‚…Š€ € Ž‹œ˜“ž “Š‚“
-		CMP AL,'A' 
-		JB CHECK_LIT_LET
-		CMP AL,'F'
-		JA CHECK_LIT_LET
-		
-		; Ž‹“—…ˆ… “Š‚›
-		SUB AL,'A' 
-		ADD AL, 10  
-		PUSH AX
-	JMP CORRECT
-	
-	; Ž‚…Š€ € ‚‚Ž„ Œ€‹…œŠŽ‰ “Š‚›
-	CHECK_LIT_LET:
-		; Ž‚…Š€ € Œ€‹…œŠ“ž “Š‚“
+	; Ž‚…Š€ € ‚‚Ž„ “Š‚›
+	CHECK_LET:
+		; Ž‚…Š€ € “Š‚“
 		CMP AL,'A' 
 		JB FINISH
 		CMP AL,'F'
@@ -247,7 +233,7 @@ MACH_TO_DEC PROC
 		; DX - Ž‘’€’ŽŠ
 		MOV DX, 0	
 		; BX - „…‹ˆ’…‹œ
-		MOV BX, ARR[SI]	;„…‹ˆ’…‹œ 
+		MOV BX, ARR[SI]
 	
 		; „…‹ˆŒ AX € BX, ˆ ’ŽŒ AX - —€‘’Ž…, DX - Ž‘’€’ŽŠ
 		DIV BX	
@@ -256,16 +242,15 @@ MACH_TO_DEC PROC
 
 		; ‚›‚Ž„ ‘ˆŒ‚Ž‹€ € Š€
 		ADD AX,'0'		
-		MOV DL,AL
+		MOV DL, AL
 		CALL PUTCH
 
 		; Ž‹“—€…Œ Ž‚Ž… „…‹ˆŒŽ…
 		POP AX
-		INC SI
-		INC SI
+		ADD SI, 2
 	
 		CMP SI, 10
-	JB CYCLE	
+	JB CYCLE
 RET
 MACH_TO_DEC	ENDP
 
@@ -274,10 +259,10 @@ MYCODE ENDS
 
 
 DATA SEGMENT
-	STARTSTR DB, '‚‚…„ˆ’… —ˆ‘‹Ž (HHHH) :$'
-	HEXSTR DB '0123456789ABCDEF'
-	ARR DW 10000, 1000, 100, 10, 1
-	INFSTR DB, 'Ž‘’€‚œ’… ‡€—…’$'
+	STARTSTR 	DB		'‚‚…„ˆ’… —ˆ‘‹Ž (HHHH) :$'
+	HEXSTR 		DB	 	'0123456789ABCDEF'
+	ARR 		DW 		10000, 1000, 100, 10, 1
+	INFSTR 		DB 		'Ž‘’€‚œ’… ‡€—…’$'
 DATA ENDS
 
 END START
