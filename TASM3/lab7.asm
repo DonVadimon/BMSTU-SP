@@ -8,7 +8,7 @@ START:
 	
 MAIN:
 	;Ž—ˆ‘’Š€ Š€€
-	CALL CLRSCR;
+	CALL CLRSCR
 	
 	; …„‹Ž†…ˆ… ‚‚…‘’ˆ ‘ˆŒ‚Ž‹€
 	MOV DL, OFFSET STARTSTR
@@ -34,7 +34,7 @@ MAIN:
 	; ‘Ž•€Ÿ…Œ —ˆ‘‹Ž
 	PUSH BX
 	
-	; Ð’ž
+	; €‚Ž
 	MOV DL, ' '
 	CALL PUTCH
 	MOV DL, '='
@@ -79,7 +79,7 @@ JMP MAIN
 
 EXIT:
 	; Ž—ˆ‘’Š€ Š€€
-	CALL CLRSCR;
+	CALL CLRSCR
 	
 	; Âû’ž” ˜ôžðœö˜˜ ž ð•‘•
 	MOV DL, OFFSET INFSTR
@@ -90,7 +90,7 @@ EXIT:
 	CALL GETCH_NO_ECHO
 	
 	; Ž—ˆ‘’Š€ Š€€
-	CALL CLRSCR;
+	CALL CLRSCR
 	
 	; Âûôž” ˜— Ÿðž“ðœœû
 	MOV AL, 0
