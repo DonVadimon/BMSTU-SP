@@ -3,5 +3,6 @@
 
 # Except these files
 !.gitignore
-!*/*.ASM
+!README.md
+!*.asm
 !TASM3.ZIP
