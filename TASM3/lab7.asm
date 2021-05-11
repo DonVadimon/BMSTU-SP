@@ -69,7 +69,21 @@ MAIN:
 	
 	; ‚›‚Ž„ „…‘Ÿ’ˆ—ŽƒŽ —ˆ‘‹€
 	POP BX
+	PUSH BX
 	CALL MACH_TO_DEC
+
+	; ’ˆ…
+	MOV DL, ' '
+	CALL PUTCH
+	MOV DL, '-'
+	CALL PUTCH
+	MOV DL, ' '
+	CALL PUTCH
+
+	; „ŽŽ‹ˆ’…‹œŽ…
+	POP BX
+	CALL ADDITIONAL
+
 	CALL CLRF
 	
 	; Ž†ˆ„€ˆ… ‚‚Ž„€ ‘ˆŒ‚Ž‹€
@@ -262,6 +276,64 @@ MACH_TO_DEC PROC
 	RET
 MACH_TO_DEC	ENDP
 
+; …‘‹ˆ —ˆ‘‹Ž …—…’Ž…, ’Ž —ˆ‘‹Ž ‚ Š‚€„€’…, € …‘‹ˆ —…’Ž…, ’Ž „…‹…ˆ… € „‚€
+ADDITIONAL PROC
+	MOV CX, BX
+	; AX - „…‹ˆŒŽ…
+	MOV AX, BX
+	; DX - Ž‘’€’ŽŠ
+	MOV DX, 0
+	; BX - „…‹ˆ’…‹œ
+	MOV BX, 2
+	
+	; „…‹ˆŒ AX € BX, ˆ ’ŽŒ AX - —€‘’Ž…, DX - Ž‘’€’ŽŠ
+	DIV BX
+	CMP DX, 0
+	JE IS_EVEN
+	
+	; …—…’Ž… - ‚Ž‡‚Ž„ˆŒ ‚ Š‚€„€’
+	MOV BX, CX
+	MOV AX, BX
+	; DX - …‚€Ÿ Ž‹Ž‚ˆ€, AX - ‚’Ž€Ÿ Ž‹Ž‚ˆ€
+	MUL BX
+	PUSH AX
+	; ‘Ž•€Ÿ…Œ —ˆ‘‹Ž
+	PUSH DX
+	
+	; ‚›‚Ž„ € Š€ …‚›• 2 ‘ˆŒ‚Ž‹Ž‚
+	MOV AL, DH
+	CALL HEX
+	
+	; ‚›‚Ž„ € Š€ ‚’Ž›• 2 ‘ˆŒ‚Ž‹Ž‚
+	POP DX
+	MOV AL, DL
+	CALL HEX
+	
+	POP AX
+	; ‘Ž•€Ÿ…Œ —ˆ‘‹Ž
+	MOV DX, AX
+	PUSH DX
+	
+	; ‚›‚Ž„ € Š€ …‚›• 2 ‘ˆŒ‚Ž‹Ž‚
+	MOV AL, DH
+	CALL HEX
+	
+	; ‚›‚Ž„ € Š€ ‚’Ž›• 2 ‘ˆŒ‚Ž‹Ž‚
+	POP DX
+	MOV AL, DL
+	CALL HEX
+
+	JMP LEAVE_ADDITIONAL
+
+	; —…’Ž… - ‚›‚Ž„ˆŒ „…‹…ˆ… € 2
+	IS_EVEN:
+	MOV BX, AX
+	CALL MACH_TO_DEC
+	
+	LEAVE_ADDITIONAL:
+	RET
+ADDITIONAL ENDP
+
 ; ŠŽ…– ‘…ƒŒ…’€
 MYCODE ENDS
 
@@ -270,9 +342,8 @@ DATA SEGMENT
 	STARTSTR 	DB		'‚‚…„ˆ’… —ˆ‘‹Ž (HHHH) :$'
 	HEXSTR 		DB	 	'0123456789ABCDEF'
 	ARR 		DW 		10000, 1000, 100, 10, 1
+	ARR_HIGHT	DD 		1000000000, 100000000, 10000000, 1000000, 100000
 	INFSTR 		DB 		'Ž‘’€‚œ’… ‡€—…’$'
 DATA ENDS
 
 END START
-
-; ¥á«¨ ç¨á«® ­¥ç¥â­®¥, â® ç¨á«® ¢ ª¢ ¤à â¥,   ¥á«¨ ç¥â­®¥, â® ¤¥«¥­¨¥ ­  ¤¢ 
