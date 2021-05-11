@@ -1,8 +1,5 @@
-# Ignore everything
-*
-
-# Except these files
-!.gitignore
-!README.md
-!*.asm
-!TASM3.ZIP
+/DOSB074
+/LAB3_7SP
+DOSB074.ZIP
+LAB3_7SP.ZIP
+METOD_SP_2021.pdf

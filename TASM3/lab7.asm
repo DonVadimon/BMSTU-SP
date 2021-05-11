@@ -11,7 +11,7 @@ MAIN:
 	CALL CLRSCR
 	
 	; ПРЕДЛОЖЕНИЕ ВВЕСТИ СИМВОЛА
-	MOV DL, OFFSET STARTSTR
+	MOV DX, OFFSET STARTSTR
 	CALL PUTST
 	CALL CLRF
 	
@@ -92,7 +92,7 @@ EXIT:
 	; ОЧИСТКА ЭКРАНА
 	CALL CLRSCR
 	
-	; ┬√ЇЮФ ШЧ ЯЁЮУЁРЬЬ√
+	; ВЫХОД ИЗ ПРОГРАММЫ
 	MOV AL, 0
 	MOV AH, 4CH
 	INT 021H
@@ -156,7 +156,7 @@ HEX PROC
 	PUSH AX
 	SHR AL, 4
 	XLAT 
-	
+	; A4 -> 4134
 	; ВЫВОД ДЕСЯТКОВ
 	MOV DL, AL
 	CALL PUTCH
@@ -226,32 +226,40 @@ HEX_TO_MACH ENDP
 ; ПРОЦЕДУРА - ПЕРЕВОД В ДЕСЯТИЧНЫЙ КОД
 MACH_TO_DEC PROC
 	; AX - ДЕЛИМОЕ
-	MOV AX, BX      	
+	MOV AX, BX 
 	MOV SI, 0
-	
+	MOV DI, 0
 	CYCLE:
 		; DX - ОСТАТОК
-		MOV DX, 0	
+		MOV DX, 0 
 		; BX - ДЕЛИТЕЛЬ
 		MOV BX, ARR[SI]
-	
 		; ДЕЛИМ AX НА BX, ПРИ ЭТОМ AX - ЧАСТНОЕ, DX - ОСТАТОК
-		DIV BX	
+		DIV BX 
 		; СОХРАНЯЕМ ОСТАТОК
 		PUSH DX
-
 		; ВЫВОД СИМВОЛА НА ЭКРАН
-		ADD AX,'0'		
+		ADD AX, '0'  
+		CMP AX, '0'
+		JE ZERO
+		JNE PRINT
+		ZERO:
+		CMP SI, 8
+		JE PRINT
+		CMP DI, 0
+		JE IGNORE
+		JNE PRINT
+		PRINT:
+		MOV DI, 1
 		MOV DL, AL
 		CALL PUTCH
-
-		; ПОЛУЧАЕМ НОВОЕ ДЕЛИМОЕ
+		IGNORE:
+		; ПОЛУЧАЕМ НОВОЕ ЗНАЧЕНИЕ ДЕЛИМОГО
 		POP AX
 		ADD SI, 2
-	
 		CMP SI, 10
-	JB CYCLE
-RET
+	JB CYCLE 
+	RET
 MACH_TO_DEC	ENDP
 
 ; КОНЕЦ СЕГМЕНТА
@@ -266,3 +274,5 @@ DATA SEGMENT
 DATA ENDS
 
 END START
+
+; если число нечетное, то число в квадрате, а если четное, то деление на два
